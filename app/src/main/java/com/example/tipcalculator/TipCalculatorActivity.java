@@ -7,7 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 public class TipCalculatorActivity extends AppCompatActivity {
     double tipPercent = 0;
@@ -62,13 +65,19 @@ public class TipCalculatorActivity extends AppCompatActivity {
                     rbOkay.setError("Select service quality");
                 }else{
                     try {
-                        costOfService = Double.valueOf(costOfServiceTv.getText().toString());
+                        costOfService = Double.parseDouble(costOfServiceTv.getText().toString());
                     }catch (Exception e){
                         costOfServiceTv.setError("Invalid Characters");
                         return;
                     }
                     tipAmount = costOfService * tipPercent;
-                    tipAmount = Math.round(tipAmount);
+                    DecimalFormat f = new DecimalFormat("##.00");
+                    tipAmount = Double.parseDouble(f.format(tipAmount));
+
+                    Switch roundTipSwitch = findViewById(R.id.roundTipSwitch);
+                    if(roundTipSwitch.isChecked()){
+                        tipAmount = Math.round(tipAmount);
+                    }
                     resultTv.setText("Total Tip is: " + tipAmount);
                 }
             }
