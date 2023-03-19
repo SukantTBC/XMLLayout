@@ -14,7 +14,6 @@ import java.text.DecimalFormat;
 
 public class TipCalculatorActivity extends AppCompatActivity {
     double tipPercent = 0;
-    int costOfService=0;
 
     TextView costOfServiceTv;
     TextView resultTv;
@@ -31,55 +30,49 @@ public class TipCalculatorActivity extends AppCompatActivity {
         resultTv = findViewById(R.id.resultTv);
 
         tipRadioGroup = findViewById(R.id.radioGroup);
-        tipRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                switch (checkedId) {
-                    case R.id.amazingRadioBtn:
-                        tipPercent = 0.20;
-                        break;
-                    case R.id.goodRadioBtn:
-                        tipPercent = 0.18;
-                        break;
-                    case R.id.okayRadioBtn:
-                        tipPercent = 0.15;
-                        break;
-                }
+        tipRadioGroup.setOnCheckedChangeListener((radioGroup, checkedId) -> {
+            switch (checkedId) {
+                case R.id.amazingRadioBtn:
+                    tipPercent = 0.20;
+                    break;
+                case R.id.goodRadioBtn:
+                    tipPercent = 0.18;
+                    break;
+                case R.id.okayRadioBtn:
+                    tipPercent = 0.15;
+                    break;
             }
         });
 
         RadioButton rbOkay= findViewById(R.id.okayRadioBtn);
 
         calculateBtn = findViewById(R.id.calculateBtn);
-        calculateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        calculateBtn.setOnClickListener(view -> {
 
-                double costOfService;
-                double tipAmount;
+            double costOfService;
+            double tipAmount;
 
-                int checkedId=tipRadioGroup.getCheckedRadioButtonId();
-                if(costOfServiceTv.getText()==""){
-                    costOfServiceTv.setError("Enter Cost of Service");
-                } else if (checkedId<0) {
-                    rbOkay.setError("Select service quality");
-                }else{
-                    try {
-                        costOfService = Double.parseDouble(costOfServiceTv.getText().toString());
-                    }catch (Exception e){
-                        costOfServiceTv.setError("Invalid Characters");
-                        return;
-                    }
-                    tipAmount = costOfService * tipPercent;
-                    DecimalFormat f = new DecimalFormat("##.00");
-                    tipAmount = Double.parseDouble(f.format(tipAmount));
-
-                    Switch roundTipSwitch = findViewById(R.id.roundTipSwitch);
-                    if(roundTipSwitch.isChecked()){
-                        tipAmount = Math.round(tipAmount);
-                    }
-                    resultTv.setText("Total Tip is: " + tipAmount);
+            int checkedId=tipRadioGroup.getCheckedRadioButtonId();
+            if(costOfServiceTv.getText()==""){
+                costOfServiceTv.setError("Enter Cost of Service");
+            } else if (checkedId<0) {
+                rbOkay.setError("Select service quality");
+            }else{
+                try {
+                    costOfService = Double.parseDouble(costOfServiceTv.getText().toString());
+                }catch (Exception e){
+                    costOfServiceTv.setError("Invalid Characters");
+                    return;
                 }
+                tipAmount = costOfService * tipPercent;
+                DecimalFormat f = new DecimalFormat("##.00");
+                tipAmount = Double.parseDouble(f.format(tipAmount));
+
+                Switch roundTipSwitch = findViewById(R.id.roundTipSwitch);
+                if(roundTipSwitch.isChecked()){
+                    tipAmount = Math.round(tipAmount);
+                }
+                resultTv.setText("Total Tip is: " + tipAmount);
             }
         });
     }
